@@ -1,0 +1,193 @@
+int i;
+int j;
+int mspeed[4];
+int mdirection[4];
+
+
+  // Motor 1 connections
+int en1 = 9;
+int in1 = 8;
+int in2 = 7;
+// Motor 2 connections
+int en2 = 3;
+int in3 = 5;
+int in4 = 4;
+// Motor 3 connections
+int en3 = 10;
+int in5 = 6;
+int in6 = 2;
+// Motor 4 connections
+int en4 =13 ;
+int in7 =11 ;
+int in8 =12 ;
+
+
+
+
+void speeds()
+{
+  //int mspeed[i]; 
+  for ( i=0;i<4;i++)
+  {
+    mspeed[i] = random(0,256);
+
+    Serial.println(mspeed[i]);
+    delay(500); 
+  }
+  
+}
+void directions()
+{
+  //int mdirection[j];
+  for( j=0;j<4;j++)
+  {
+    
+    mdirection[j] = random(0,2);
+    Serial.println( mdirection[j]);
+    delay(500);
+  }
+}
+
+
+
+
+void setup()
+{
+  pinMode(en1, OUTPUT);
+  pinMode(en2, OUTPUT);
+  pinMode(en3, OUTPUT);
+  pinMode(en4, OUTPUT);
+  pinMode(in1, OUTPUT);
+  pinMode(in2, OUTPUT);
+  pinMode(in3, OUTPUT);
+  pinMode(in4, OUTPUT);
+  pinMode(in5, OUTPUT);
+  pinMode(in6, OUTPUT);
+  pinMode(in7, OUTPUT);
+  pinMode(in8, OUTPUT);
+  
+  digitalWrite(in1, LOW);
+  digitalWrite(in2, LOW);
+  digitalWrite(in3, LOW);
+  digitalWrite(in4, LOW);
+  digitalWrite(in5, LOW);
+  digitalWrite(in6, LOW);
+  digitalWrite(in7, LOW);
+  digitalWrite(in8, LOW);
+  
+  Serial.begin(9600);
+  randomSeed(analogRead(A1));
+  Serial.println("baslattik");
+}
+
+void directionControl() 
+{
+  analogWrite(en1,mspeed[0]);
+  analogWrite(en2,mspeed[1]);
+  analogWrite(en3,mspeed[2]);
+  analogWrite(en4,mspeed[3]);
+  
+  if (mdirection[0]==1)
+  {
+    digitalWrite(8,HIGH);
+    digitalWrite(7,LOW);
+  }
+  else
+  {  
+    digitalWrite(8,LOW);
+    digitalWrite(7,HIGH);
+  } 
+  if (mdirection[1]==1)
+  {
+    digitalWrite(5,HIGH);
+    digitalWrite(4,LOW);
+  }
+  else
+  { 
+    digitalWrite(5,LOW);
+    digitalWrite(4,HIGH);
+  }  
+  if (mdirection[2]==1)
+  { 
+    digitalWrite(6,HIGH);
+    digitalWrite(2,LOW);
+  }
+  else
+  {
+    digitalWrite(6,LOW);
+    digitalWrite(2,HIGH);
+  }
+    
+  if (mdirection[3]==1)
+  {
+    digitalWrite(11,HIGH);
+    digitalWrite(12,LOW);
+  }
+  else
+  {
+    digitalWrite(11,LOW);
+    digitalWrite(12,HIGH);
+  }
+ }
+void speedControl() 
+{
+  //turn on motors
+  digitalWrite(in1, LOW);
+  digitalWrite(in2, HIGH);
+  digitalWrite(in3, LOW);
+  digitalWrite(in4, HIGH);
+  digitalWrite(in5, LOW);
+  digitalWrite(in6, HIGH);
+  digitalWrite(in7, LOW);
+  digitalWrite(in8, HIGH);
+  
+  analogWrite(en1,mspeed[0]);
+  analogWrite(en2,mspeed[1]);
+  analogWrite(en3,mspeed[2]);
+  analogWrite(en4,mspeed[3]);
+ 
+  //turn of motors   
+  digitalWrite(in1, LOW);
+  digitalWrite(in2, LOW);
+  digitalWrite(in3, LOW);
+  digitalWrite(in4, LOW);
+  digitalWrite(in5, LOW);
+  digitalWrite(in6, LOW);
+  digitalWrite(in7, LOW);
+  digitalWrite(in8, LOW);
+  
+}   
+    
+
+
+void loop()
+{
+  speeds();
+  directions();
+  
+  Serial.println("random isi bitti");
+  //int mspeed[i];
+  //int mdirection[j];
+  
+  String motor1;
+  motor1= String(mdirection[0])+String(mspeed[0]);
+  String motor2;
+  motor2= String(mdirection[1])+String(mspeed[1]); 
+  String motor3;
+  motor3= String(mdirection[2])+String(mspeed[2]);
+  String motor4;
+  motor4= String(mdirection[3])+String(mspeed[3]);
+  Serial.println("motor stringi bitti");
+  Serial.println(motor1);
+  
+  
+  
+  String data;
+  data = "S"+ motor1 + motor2 + motor3 + motor4 + "F" ;
+  Serial.println(data);
+  
+  directionControl();
+	delay(1000);
+  speedControl();
+	delay(1000);
+}
